@@ -1,0 +1,51 @@
+:root {
+  font-family: 'Avenir Next', Avenir, 'Segoe UI', sans-serif;
+  color: #263e35;
+  background: #f5f4ef;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 2px solid #46735b; outline-offset: 6px; }
+.page { min-height: 100svh; max-width: 1600px; margin: auto; padding: 0 64px; display: flex; flex-direction: column; }
+.header { padding: 38px 0; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 650; font-size: 23px; letter-spacing: -1px; }
+.brand-mark { width: 30px; height: 30px; }
+svg { display: block; width: 100%; height: 100%; }
+.brand-dot, h1 span { color: #739078; }
+main { flex: 1; display: grid; place-items: center; padding: 64px 0 100px; }
+.hero { text-align: center; max-width: 640px; }
+.hero-mark { width: 64px; height: 64px; padding: 12px; border: 1px solid #d5dece; background: #e9eddf; border-radius: 19px; margin: 0 auto 27px; transform: rotate(-5deg); }
+.hero-mark svg { transform: rotate(5deg); }
+h1 { margin: 0; font-size: clamp(68px, 10vw, 112px); line-height: 1.12; font-weight: 550; letter-spacing: -0.065em; }
+.description { max-width: 440px; margin: 24px auto 35px; color: #65716a; font-size: 20px; line-height: 1.7; letter-spacing: -0.35px; }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 32px; padding: 18px 24px; border-radius: 8px; background: #294a3b; color: #fff; font-size: 14px; font-weight: 550; transition: background 160ms, transform 160ms; }
+.button:hover { background: #1e382d; transform: translateY(-2px); }
+.button span { font-size: 21px; line-height: 1; }
+.contact { display: table; margin: 24px auto 0; font-size: 14px; color: #65716a; }
+.contact:hover, .footer a:hover, .back-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.footer { border-top: 1px solid #dddfd6; padding: 27px 0 30px; display: flex; justify-content: space-between; gap: 24px; font-size: 12px; color: #65716a; }
+.location { display: flex; align-items: center; gap: 9px; }
+.location-dot { width: 6px; height: 6px; border-radius: 50%; background: #789377; }
+.footer nav { display: flex; gap: 28px; }
+.legal { width: 100%; max-width: 700px; }
+.legal h1 { font-size: clamp(36px, 6vw, 60px); letter-spacing: -0.04em; margin-top: 32px; }
+.legal p { color: #65716a; line-height: 1.8; }
+.legal p a { text-decoration: underline; }
+.legal h2 { font-size: 19px; margin: 30px 0 8px; letter-spacing: -0.3px; }
+.legal .draft { background: #e9eddf; padding: 14px 18px; border-radius: 8px; font-size: 14px; }
+.back-link { font-size: 14px; }
+@media (max-width: 600px) {
+  .page { padding: 0 24px; }
+  .header { padding: 26px 0; }
+  main { padding: 48px 0 70px; }
+  .description { font-size: 18px; max-width: 330px; }
+  .footer { flex-direction: column; align-items: center; padding: 24px 0; gap: 20px; }
+  .footer nav { gap: 24px; }
+}
+@media (prefers-reduced-motion: reduce) { .button { transition: none; } }
