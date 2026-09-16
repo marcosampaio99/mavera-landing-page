@@ -2,7 +2,7 @@ import React from 'react';
 
 export function LegalContent({ privacy, email }) {
   return <>
-    <p className="draft">Versão preliminar — sujeita a revisão e à confirmação dos dados da entidade responsável antes da publicação.</p>
+    {/* <p className="draft">Versão preliminar — sujeita a revisão e à confirmação dos dados da entidade responsável antes da publicação.</p> */}
     {privacy ? <>
       <h2>1. Âmbito e contacto</h2>
       <p>Este texto descreve a privacidade no site de apresentação da Mavera. Não abrange o tratamento de dados de reservas, clientes ou utilizadores no backoffice, que exige informação própria. Para questões de privacidade, escreve para <a href={`mailto:${email}`}>{email}</a>. A identificação completa e a morada da entidade responsável serão acrescentadas na versão final.</p>
