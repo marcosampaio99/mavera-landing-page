@@ -1,170 +1,72 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { ArrowIcon } from './ArrowIcon';
 
-// Screenshots reais ficam em /public/screenshots/<file>. Enquanto o ficheiro
-// não existir, mostra-se o placeholder com a especificação de captura.
-function ProductShot({ file, alt, spec, tags }) {
-  const [pending, setPending] = useState(false);
-
+function ProductShot({ file, alt, width, height, eager = false }) {
   return (
-    <figure className="shot-frame">
-      <div className="shot-chrome" aria-hidden="true"><span /><span /><span /></div>
-      {pending ? (
-        <div className="shot-pending" role="img" aria-label={alt}>
-          <p className="shot-pending-label">Screenshot a capturar</p>
-          <p className="shot-pending-spec">{spec}</p>
-        </div>
-      ) : (
-        <img src={`/screenshots/${file}`} alt={alt} loading="lazy" onError={() => setPending(true)} />
-      )}
-      {/* {tags ? (
-        <figcaption className="shot-tags">
-          {tags.map((tag) => <span className="shot-tag" key={tag}>{tag}</span>)}
-        </figcaption>
-      ) : null} */}
-    </figure>
+    <a className="product-shot" href={`/screenshots/${file}`} target="_blank" rel="noreferrer" aria-label={`${alt} — abrir imagem em tamanho completo (novo separador)`}>
+      <img src={`/screenshots/${file}`} alt={alt} width={width} height={height} loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : 'auto'} />
+    </a>
   );
 }
 
 export function Landing({ contactEmail }) {
-  const talkHref = `mailto:${contactEmail}?subject=${encodeURIComponent('A minha box')}`;
+  const talkHref = `mailto:${contactEmail}?subject=${encodeURIComponent('Conhecer a Mavera para o meu negócio')}`;
 
   return (
     <>
       <section className="hero" aria-labelledby="hero-title">
-        <span className="eyebrow hero-eyebrow">Gestão de aulas e reservas para estúdios</span>
-        <h1 id="hero-title" className="hero-title">Sabe quem vem treinar antes da aula começar.</h1>
-        <p className="hero-subtitle">Os teus alunos consultam as próximas aulas e reservam a sua vaga em segundos. A tua equipa acompanha horários, capacidade e participantes num único lugar.</p>
-        <div className="hero-actions">
-          <a className="button" href="#produto">Ver como funciona</a>
-          <a className="button secondary" href={talkHref}>Falar sobre o meu negócio</a>
-        </div>
-        <div className="flow-strip" aria-label="Como funciona uma reserva, do início ao fim">
-          <span className="flow-step">Aula publicada</span>
-          <span className="flow-arrow" aria-hidden="true">→</span>
-          <span className="flow-step">Aluno reserva</span>
-          <span className="flow-arrow" aria-hidden="true">→</span>
-          <span className="flow-step">Vaga confirmada</span>
-          <span className="flow-arrow" aria-hidden="true">→</span>
-          <span className="flow-step">Lista atualizada</span>
-        </div>
-      </section>
-
-      <section className="section" id="produto" aria-labelledby="agenda-title">
-        <div className="section-head">
-          <h2 id="agenda-title" className="section-title">A agenda do teu estúdio, e organizada.</h2>
-          <p className="section-text">Vê as próximas aulas, acompanha a lotação e abre qualquer sessão para saber exatamente quem confirmou presença.</p>
-        </div>
-        <div className="product">
-          <ProductShot
-            file="agenda.png"
-            alt="Agenda semanal do backoffice Mavera com as próximas aulas"
-            spec="Backoffice — Agenda/Sessões, vista de semana ou dia. Mostrar várias aulas com horário, nome da aula, treinador/recurso e capacidade ou nº de participantes por sessão. Usar dados de demonstração (ex.: “Cross Training 18:00”, “Open Box”, “Mobility”), nunca clientes reais."
-          />
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="aula-title">
-        <div className="section-head">
-          <h2 id="aula-title" className="section-title">Antes da aula começar, já sabes quem vem.</h2>
-          <p className="section-text">Abre qualquer aula e consulta os participantes inscritos, as vagas disponíveis e os detalhes da sessão. Sem listas paralelas, mensagens espalhadas ou confirmações manuais.</p>
-        </div>
-        <div className="product">
-          <ProductShot
-            file="sessao.png"
-            alt="Detalhe de uma aula no backoffice Mavera com a lista de participantes"
-            spec="Backoffice — Detalhe de uma Session/aula. Mostrar nome da aula, dia e hora, capacidade, nº de inscritos, lista de participantes e estado da sessão. Anonimizar ou usar dados de demonstração — sem nomes, telefones ou emails reais de alunos."
-            tags={['Horário', 'Capacidade', 'Participantes', 'Estado da sessão']}
-          />
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="aluno-title">
-        <div className="section-head">
-          <h2 id="aluno-title" className="section-title">Para o aluno, confirmar que vai deve demorar segundos.</h2>
-        </div>
-        <ol className="numbered-flow">
-          <li>
-            <span className="num">1</span>
-            <h3>Consulta as próximas aulas</h3>
-            <p>O aluno vê os horários e as sessões disponíveis.</p>
-          </li>
-          <li>
-            <span className="num">2</span>
-            <h3>Escolhe a aula</h3>
-            <p>Consulta a disponibilidade e reserva a sua vaga.</p>
-          </li>
-          <li>
-            <span className="num">3</span>
-            <h3>Está feito</h3>
-            <p>A reserva fica associada ao aluno e aparece imediatamente na agenda.</p>
-          </li>
-        </ol>
-      </section>
-
-      <section className="section" aria-labelledby="funciona-title">
-        <div className="section-head">
-          <h2 id="funciona-title" className="section-title">Como funciona</h2>
-        </div>
-        <ul className="steps-grid">
-          <li>
-            <p className="step-index">01</p>
-            <h3>Cria o horário uma vez</h3>
-            <p>Define as aulas recorrentes, horários, capacidade e restante configuração.</p>
-          </li>
-          <li>
-            <p className="step-index">02</p>
-            <h3>Os alunos escolhem quando vão</h3>
-            <p>Consultam as próximas aulas e reservam a sua vaga.</p>
-          </li>
-          <li>
-            <p className="step-index">03</p>
-            <h3>A lotação atualiza-se automaticamente</h3>
-            <p>Cada inscrição fica associada à sessão certa.</p>
-          </li>
-          <li>
-            <p className="step-index">04</p>
-            <h3>A equipa sabe quem esperar</h3>
-            <p>Antes da aula, basta abrir a sessão e consultar os participantes.</p>
-          </li>
-        </ul>
-      </section>
-
-      <section className="section" aria-labelledby="beneficios-title">
-        <div className="section-head">
-          <h2 id="beneficios-title" className="section-title">Menos gestão à volta da aula. Mais tempo para o teu negócio.</h2>
-        </div>
-        <ul className="benefits-grid">
-          <li>
-            <h3>Presenças organizadas</h3>
-            <p>Cada aula tem a sua lista atualizada de participantes.</p>
-          </li>
-          <li>
-            <h3>Capacidade controlada</h3>
-            <p>Os lugares disponíveis são geridos por sessão.</p>
-          </li>
-          <li>
-            <h3>Horários recorrentes</h3>
-            <p>A programação semanal não precisa de ser recriada constantemente.</p>
-          </li>
-        </ul>
-      </section>
-
-      <section className="section" aria-labelledby="diferenca-title">
-        <div className="differentiator">
-          <h2 id="diferenca-title" className="section-title">Não é apenas um calendário.</h2>
-          <p className="section-text">A Mavera foi construída para ligar o que o cliente vê ao que a equipa gere. A mesma estrutura que apresenta as aulas disponíveis ao aluno alimenta a agenda, as reservas e os participantes no backoffice.</p>
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="cta-title">
-        <div className="cta-final">
-          <h2 id="cta-title" className="section-title">Vê como a Mavera funcionaria no teu local.</h2>
-          <p className="section-text">Podemos configurar as tuas aulas, capacidade e horários e mostrar o fluxo completo — desde a reserva do aluno até à lista de participantes da aula.</p>
-          <div className="hero-actions">
-            <a className="button" href={talkHref}>Falar sobre o meu negócio</a>
-            <a className="button secondary" href="#produto">Ver o produto</a>
+        <p className="eyebrow">O teu negócio, bem organizado</p>
+        <h1 id="hero-title">Gestão de marcações e horários,<br /><span>sem complicar a operação.</span></h1>
+        <div className="hero-bottom">
+          <a className="text-link" href="#produto">Conhecer o produto <ArrowIcon direction="down" /></a>
+          <div className="hero-intro">
+            <p>Marcações, sessões e clientes no mesmo lugar. Organiza a disponibilidade da equipa e acompanha o que acontece ao longo do dia.</p>
+            <a className="button primary" href={talkHref}>Falar sobre o meu negócio <ArrowIcon /></a>
           </div>
         </div>
+      </section>
+
+      <section className="agenda-section" id="produto" aria-labelledby="agenda-title">
+        <div className="agenda-heading">
+          <h2 id="agenda-title">O dia à vista.<br />A semana sob controlo.</h2>
+          <p>Consulta a agenda por dia, semana ou mês. Marcações individuais e aulas de grupo, com os horários e profissionais certos.</p>
+        </div>
+        <figure className="agenda-figure">
+          <ProductShot file="agenda.png" alt="Agenda semanal da Mavera com marcações de massagem e sessões de mobilidade, Pilates e treino funcional" width={2160} height={1673} eager />
+          <figcaption><span>01 / Agenda semanal</span><span>Produto real · dados de demonstração</span></figcaption>
+        </figure>
+      </section>
+
+      <section className="session-section" aria-labelledby="session-title">
+        <figure className="session-figure">
+          <ProductShot file="sessao.png" alt="Detalhe de uma sessão de Mobilidade: horário, profissional, capacidade de sete lugares e três participantes confirmados" width={1815} height={1335} />
+          <figcaption>02 / Uma sessão, todos os detalhes</figcaption>
+        </figure>
+        <div className="session-copy">
+          <p className="eyebrow">Uma pessoa ou um grupo</p>
+          <h2 id="session-title">Cada sessão tem o seu lugar.</h2>
+          <p>Define aulas ou sessões recorrentes, ajusta a capacidade e consulta quem está inscrito. Para atendimentos individuais, gere cada marcação na mesma agenda.</p>
+          {/* <a className="text-link" href={talkHref}>Ver a Mavera com o meu caso <ArrowIcon /></a> */}
+        </div>
+      </section>
+
+      <section className="operation-section" aria-labelledby="operation-title">
+        <div className="operation-intro">
+          <p className="eyebrow">Tudo ligado</p>
+          <h2 id="operation-title">Por trás de cada marcação,<br />uma operação organizada.</h2>
+          <p>Para estúdios, clínicas, terapeutas, ginásios e outros negócios que trabalham com marcações.</p>
+        </div>
+        <dl className="capabilities">
+          <div><dt>Clientes</dt><dd>Contactos e histórico de marcações, sempre à mão.</dd></div>
+          <div><dt>Serviços e recursos</dt><dd>Define o que ofereces e associa os profissionais, espaços ou equipamentos.</dd></div>
+          <div><dt>Disponibilidade</dt><dd>Organiza horários recorrentes e bloqueia períodos de indisponibilidade.</dd></div>
+          <div><dt>Notificações</dt><dd>Configura as notificações de marcações para manter as pessoas informadas.</dd></div>
+        </dl>
+      </section>
+
+      <section className="contact-section" aria-labelledby="contact-title">
+        <h2 id="contact-title">Vamos organizar<br />o teu próximo dia?</h2>
+        <div><p>Conta-nos como funciona o teu negócio.<br />Mostramos-te como a Mavera se encaixa.</p><a className="button primary" href={talkHref}>Falar sobre o meu negócio <ArrowIcon /></a></div>
       </section>
     </>
   );
