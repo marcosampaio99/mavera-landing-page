@@ -15,12 +15,12 @@ export function Landing({ contactEmail }) {
   return (
     <>
       <section className="hero" aria-labelledby="hero-title">
-        <p className="eyebrow">O teu negócio, bem organizado</p>
-        <h1 id="hero-title">Gestão de marcações e horários,<br /><span>sem complicar a operação.</span></h1>
+        <p className="eyebrow">Adaptado ao teu negócio, não o contrário</p>
+        <h1 id="hero-title">Cada negócio marca e organiza<br /><span>à sua maneira. O teu também.</span></h1>
         <div className="hero-bottom">
           <a className="text-link" href="#produto">Conhecer o produto <ArrowIcon direction="down" /></a>
           <div className="hero-intro">
-            <p>Marcações, sessões e clientes no mesmo lugar. Organiza a disponibilidade da equipa e acompanha o que acontece ao longo do dia.</p>
+            <p>Não é um sistema genérico de marcações — é construído à volta de como o teu negócio realmente funciona: os teus serviços, a tua equipa e os teus horários.</p>
             <a className="button primary" href={talkHref}>Falar sobre o meu negócio <ArrowIcon /></a>
           </div>
         </div>
