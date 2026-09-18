@@ -19,7 +19,10 @@ function App() {
       <a className="skip-link" href="#main">Saltar para o conteúdo</a>
       <header className="header">
         <a className="brand" href="/" aria-label="Mavera — página inicial">mavera<span className="brand-dot" aria-hidden="true" /></a>
+        <nav className="header-nav" aria-label="Navegação principal">
+          {!legalTitle && <><a className="nav-link" href="#produto">Produto</a><a className="nav-link" href="#infraestrutura">Infraestrutura</a></>}
         <a className="header-login" href="https://app.mavera.pt/login">Entrar no backoffice <ArrowIcon /></a>
+        </nav>
       </header>
 
       <main id="main" tabIndex={-1}>
