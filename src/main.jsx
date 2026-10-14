@@ -1,49 +1,51 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ArrowIcon } from './ArrowIcon';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 import { LegalContent } from './LegalContent';
 import { Landing } from './Landing';
+import { Solutions } from './Solutions';
+import { Closing, SiteFooter, SiteHeader, useReveal } from './Site';
 
 // Configurar o contacto e os URLs dos documentos antes da publicação.
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || 'app.mavera@gmail.com';
 const privacyUrl = import.meta.env.VITE_PRIVACY_URL || '/privacidade';
 const termsUrl = import.meta.env.VITE_TERMS_URL || '/termos';
 
+const routes = {
+  '': { id: 'home' },
+  '/solucoes': { id: 'solucoes', title: 'Soluções — Mavera' },
+  '/privacidade': { id: 'legal', title: 'Política de Privacidade — Mavera', legalTitle: 'Política de Privacidade' },
+  '/termos': { id: 'legal', title: 'Termos — Mavera', legalTitle: 'Termos' },
+};
+
 function App() {
   const path = window.location.pathname.replace(/\/$/, '');
-  const legalTitle = path === '/privacidade' ? 'Política de Privacidade' : path === '/termos' ? 'Termos' : null;
+  const route = routes[path] || routes[''];
+  const hasContact = route.id !== 'legal';
+
+  useReveal();
+  useEffect(() => { if (route.title) document.title = route.title; }, [route.title]);
 
   return (
-    <div className="page">
+    <div className={`page page--${route.id}`}>
       <a className="skip-link" href="#main">Saltar para o conteúdo</a>
-      <header className="header">
-        <a className="brand" href="/" aria-label="Mavera — página inicial">mavera<span className="brand-dot" aria-hidden="true" /></a>
-        <nav className="header-nav" aria-label="Navegação principal">
-          {!legalTitle && <><a className="nav-link" href="#produto">Produto</a><a className="nav-link" href="#infraestrutura">Infraestrutura</a></>}
-        <a className="header-login" href="https://app.mavera.pt/login">Entrar no backoffice <ArrowIcon /></a>
-        </nav>
-      </header>
+      <SiteHeader current={route.id} hasContact={hasContact} />
 
       <main id="main" tabIndex={-1}>
-        {legalTitle ? (
-          <section className="legal" aria-labelledby="legal-title">
+        {route.id === 'legal' && (
+          <section className="legal wrap" aria-labelledby="legal-title">
             <a className="back-link" href="/"><ArrowIcon direction="left" /> Voltar</a>
-            <h1 id="legal-title">{legalTitle}</h1>
+            <h1 id="legal-title">{route.legalTitle}</h1>
             <LegalContent privacy={path === '/privacidade'} email={contactEmail} />
           </section>
-        ) : (
-          <Landing contactEmail={contactEmail} />
         )}
+        {route.id === 'home' && <Landing contactEmail={contactEmail} />}
+        {route.id === 'solucoes' && <Solutions contactEmail={contactEmail} />}
+        {hasContact && <Closing contactEmail={contactEmail} index={route.id === 'home' ? '06' : null} />}
       </main>
 
-      <footer className="footer">
-        <span className="location"><span aria-hidden="true" className="location-dot" />Portugal</span>
-        <nav aria-label="Informações legais">
-          <a href={privacyUrl}>Política de Privacidade</a>
-          <a href={termsUrl}>Termos</a>
-        </nav>
-      </footer>
+      <SiteFooter privacyUrl={privacyUrl} termsUrl={termsUrl} />
     </div>
   );
 }
