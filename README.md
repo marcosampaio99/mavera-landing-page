@@ -14,7 +14,7 @@ npm run build
 npm run preview
 ```
 
-Publicar a pasta `dist`. Configurar o alojamento para servir `index.html` nas rotas `/privacidade` e `/termos`.
+Publicar a pasta `dist`. O build cria `dist/solucoes/`, `dist/privacidade/` e `dist/termos/` com uma cópia de `index.html`, por isso as rotas funcionam em qualquer alojamento estático. Ao criar uma rota nova em `src/main.jsx`, acrescentá-la também a `routes` em `vite.config.js`.
 
 Contacto: `app.mavera@gmail.com`. Os textos de Privacidade e Termos são minutas para o site informativo. Antes de publicar, completar a identidade e morada da entidade, confirmar os prestadores de alojamento/email, transferências e prazos de conservação e rever os textos. Não abrangem o tratamento de dados ou condições comerciais do backoffice. Editar `src/LegalContent.jsx` ou apontar para documentos externos através de `VITE_PRIVACY_URL` e `VITE_TERMS_URL`.
 

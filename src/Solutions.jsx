@@ -5,7 +5,7 @@ const areas = [
   {
     id: 'software',
     title: 'Software & Gestão',
-    line: 'O backoffice e a API da Mavera, configurados para a forma como trabalhas.',
+    line: 'O backoffice da Mavera, configurado para a forma como trabalhas.',
     items: [
       'Gestão de clientes, serviços, equipas e recursos',
       'Reservas e agendamentos',
@@ -58,7 +58,7 @@ export function Solutions() {
             <span className="line"><span>Três áreas.</span></span>
             <span className="line"><span><em>Um sistema<Dot className="dot--period" /></em></span></span>
           </h1>
-          <p className="sol-lede" data-reveal>Tecnologia própria — backoffice e API — e desenvolvimento à medida quando a tua empresa precisa de algo que ainda não existe.</p>
+          <p className="sol-lede" data-reveal>Tecnologia própria e desenvolvimento à medida quando a tua empresa precisa de algo que ainda não existe.</p>
         </div>
       </section>
 
