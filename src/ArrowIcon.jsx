@@ -4,6 +4,7 @@ const paths = {
   upRight: 'M5 19 19 5M5 5h14v14',
   down: 'M12 4v16m-7-7 7 7 7-7',
   left: 'M20 12H4m7-7-7 7 7 7',
+  right: 'M4 12h16m-7-7 7 7-7 7',
 };
 
 export function ArrowIcon({ direction = 'upRight' }) {

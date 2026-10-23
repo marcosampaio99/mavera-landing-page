@@ -1,12 +1,12 @@
 import React from 'react';
 import { ArrowIcon } from './ArrowIcon';
-import { Dot, SectionLabel } from './Site';
+import { SectionLabel } from './Site';
 import { projects } from './projectList';
 
 function Project({ project, index }) {
   const { name, url, domain, summary, tags, image, mobileImage, alt, tone } = project;
   return (
-    <article className="project" data-reveal>
+    <article className="project">
       {/* A imagem repete o link do texto; fica fora da ordem de tabulação. */}
       <a className="project-media" href={url} target="_blank" rel="noreferrer" tabIndex={-1} aria-hidden="true" style={{ '--tone': tone }}>
         <img className="project-desktop" src={image} alt="" width={2880} height={1800} loading="lazy" decoding="async" />
@@ -31,13 +31,13 @@ function Project({ project, index }) {
   );
 }
 
-export function Projects({ index }) {
+export function Projects() {
   return (
     <section className="projects" id="projetos" aria-labelledby="projects-title">
       <div className="wrap">
-        <SectionLabel index={index}>Projetos</SectionLabel>
+        <SectionLabel>Projetos</SectionLabel>
         <h2 id="projects-title" className="display-title projects-title" data-reveal>
-          <span className="line"><span>Trabalho selecionado<Dot className="dot--period" /></span></span>
+          <span className="line"><span>Trabalho <em>selecionado.</em></span></span>
         </h2>
         <div className="project-grid">
           {projects.map((p, i) => <Project key={p.id} project={p} index={i} />)}

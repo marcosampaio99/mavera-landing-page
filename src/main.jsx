@@ -40,9 +40,9 @@ function App() {
             <LegalContent privacy={path === '/privacidade'} email={contactEmail} />
           </section>
         )}
-        {route.id === 'home' && <Landing contactEmail={contactEmail} />}
+        {route.id === 'home' && <Landing />}
         {route.id === 'solucoes' && <Solutions contactEmail={contactEmail} />}
-        {hasContact && <Closing contactEmail={contactEmail} index={route.id === 'home' ? '06' : null} />}
+        {hasContact && <Closing contactEmail={contactEmail} />}
       </main>
 
       <SiteFooter privacyUrl={privacyUrl} termsUrl={termsUrl} />

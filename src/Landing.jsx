@@ -1,39 +1,113 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowIcon } from './ArrowIcon';
+import { FlowCanvas } from './Flow';
 import { Projects } from './Projects.jsx';
-import { Button, Dot, SectionLabel, prefersReducedMotion } from './Site';
+import { BeforeAfter, Dot, SectionLabel, prefersReducedMotion } from './Site';
 
 /* ---------------------------------------------------------------------------
-   01 — Hero
+   Hero — turbulência → o ponto de "era." → trilhos
    ------------------------------------------------------------------------ */
 
-function Hero({ talkHref }) {
+function Hero() {
+  const dotRef = useRef(null);
   return (
     <section className="hero" aria-labelledby="hero-title">
-      <div className="wrap">
-        <div className="hero-meta" data-reveal>
-          <span className="section-index">01</span>
-          <span>Software · Websites · Integrações</span>
-          <span className="hero-meta-end">Feito em Portugal</span>
-        </div>
-
-        <h1 id="hero-title" className="hero-title" data-reveal>
-          <span className="line"><span>Tecnologia</span></span>
-          <span className="line line--measure"><span>à medida</span></span>
-          <span className="line"><span>do teu negócio<Dot className="dot--period" /></span></span>
+      <FlowCanvas preset="hero" dotRef={dotRef} />
+      <div className="wrap hero-body">
+        <p className="mono-label mono-label--teal">Tecnologia à medida do teu negócio</p>
+        <h1 id="hero-title" className="hero-title" lang="en" data-reveal>
+          <span className="line"><span>Move into </span></span>
+          <span className="line it"><span>a new era<span ref={dotRef} className="node" aria-hidden="true" /></span></span>
         </h1>
-
-        <div className="hero-foot" data-reveal>
-          <p className="hero-sub">Software, websites e soluções digitais para negócios de serviços.</p>
-          <Button href={talkHref}>Vamos conversar</Button>
+        <div className="hero-foot">
+          <p className="hero-sub">Identificamos problemas, melhoramos processos e desenvolvemos soluções digitais à medida de cada negócio.</p>
+          <div className="ctas">
+            <a className="btn btn--ink" href="#missao">Conhece a Mavera</a>
+            <a className="text-link" href="#metodo"><span>Como trabalhamos</span><ArrowIcon direction="right" /></a>
+          </div>
         </div>
+      </div>
+      <div className="wrap hero-meta">
+        <span className="mono-label hero-motto"><span>Primeiro os processos</span> <span>Depois as ferramentas</span></span>
+        <span className="mono-label mono-label--teal hero-hint" aria-hidden="true">Move o cursor</span>
+        <a className="scroll-cue" href="#problema" aria-label="Descer para a secção seguinte"><ArrowIcon direction="down" /></a>
       </div>
     </section>
   );
 }
 
 /* ---------------------------------------------------------------------------
-   02 — O que fazemos
+   O problema — só turbulência, ainda sem ponto nem trilhos
+   ------------------------------------------------------------------------ */
+
+const problems = [
+  { title: 'Tarefas repetitivas', text: 'A mesma mensagem, o mesmo registo, a mesma confirmação, todas as semanas.' },
+  { title: 'Sistemas desligados', text: 'O site, os pagamentos e a gestão não falam entre si. Alguém tem de fazer a ponte à mão.' },
+  { title: 'Informação dispersa', text: 'Contactos no telemóvel, marcações em papel, contas no Excel.' },
+];
+
+function Problem() {
+  return (
+    <section className="problem" id="problema" aria-labelledby="problem-title">
+      <FlowCanvas preset="problem" />
+      <div className="wrap">
+        <SectionLabel>O problema</SectionLabel>
+        <h2 id="problem-title" className="problem-title" data-reveal>
+          <span className="line"><span>Todos os negócios têm processos </span></span>
+          <span className="line it"><span>que podem <em>melhorar.</em></span></span>
+        </h2>
+        <ul className="problems">
+          {problems.map(({ title, text }, i) => (
+            <li key={title}>
+              <span className="mono-label">0{i + 1}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   A missão e a abordagem
+   ------------------------------------------------------------------------ */
+
+function Mission() {
+  return (
+    <section className="mission" id="missao" aria-label="A nossa missão">
+      <div className="wrap">
+        <h2 className="mission-title" data-reveal>
+          <span className="line"><span>Pôr a tecnologia a trabalhar </span></span>
+          <span className="line"><span>para o teu negócio, </span></span>
+          <span className="line it"><span><em>e não o contrário.</em></span></span>
+        </h2>
+      </div>
+    </section>
+  );
+}
+
+function Approach() {
+  const dotRef = useRef(null);
+  return (
+    <section className="approach" aria-labelledby="approach-title">
+      <FlowCanvas preset="approach" dotRef={dotRef} />
+      <div className="wrap">
+        <SectionLabel>A abordagem</SectionLabel>
+        <h2 id="approach-title" className="approach-title" data-reveal>
+          <span className="line"><span>Primeiro os processos. </span></span>
+          <span className="approach-mid" aria-hidden="true"><span ref={dotRef} className="approach-dot" /></span>
+          <span className="line it approach-end"><span>Depois as <em>ferramentas.</em></span></span>
+        </h2>
+        <p className="approach-note">Começamos por perceber como o teu negócio funciona: quem marca, quem confirma, onde se perde tempo. A tecnologia vem a seguir.</p>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   O que fazemos
    ------------------------------------------------------------------------ */
 
 // Módulos reais da barra lateral do backoffice Mavera.
@@ -123,20 +197,26 @@ function Connections() {
   );
 }
 
+// Nomes e frases das Soluções no Instagram.
 const services = [
   {
-    id: 'software', tag: 'A', title: 'Software & Gestão',
-    text: 'Um backoffice nosso. Reservas, sessões, clientes e planos no mesmo sítio.',
+    id: 'software', title: 'Software à medida', lead: 'Software pensado para o teu negócio.',
+    text: 'Começa no backoffice da Mavera: agenda, marcações individuais, sessões coletivas com capacidade, clientes, planos e packs. Configuramos à forma como trabalhas e desenvolvemos o que faltar.',
     visual: <BackofficeMini />,
   },
   {
-    id: 'web', tag: 'B', title: 'Websites & Experiências Digitais',
-    text: 'Sites com a cara da tua marca — com reserva e pagamento online, por cartão ou MB WAY.',
+    id: 'web', title: 'Websites', lead: 'Mais do que estar online.', label: 'Marca · Clientes · Operação',
+    text: 'O site da tua marca com a marcação lá dentro. O cliente escolhe o horário, paga por cartão ou MB WAY e a reserva entra na tua agenda.',
     visual: <SiteAssembly />,
   },
   {
-    id: 'integrations', tag: 'C', title: 'Integrações & Automação',
-    text: 'Pagamentos por cartão e MB WAY, faturação, email e lembretes por mensagem a falar entre si. Menos trabalho repetido.',
+    id: 'automation', title: 'Processos e automação', lead: 'Menos tarefas repetitivas.',
+    text: 'Procuramos o trabalho manual que se repete todas as semanas e passamos a fazê-lo de forma automática.',
+    visual: <BeforeAfter />,
+  },
+  {
+    id: 'integrations', title: 'Integrações', lead: 'Fazer os sistemas trabalhar em conjunto.',
+    text: 'Website, pagamentos e gestão num só fluxo: cartão e MB WAY, faturação, email e lembretes por mensagem ligados ao backoffice.',
     visual: <Connections />,
   },
 ];
@@ -145,18 +225,23 @@ function Services() {
   return (
     <section className="services" id="o-que-fazemos" aria-labelledby="services-title">
       <div className="wrap">
-        <SectionLabel index="02">O que fazemos</SectionLabel>
-        <h2 id="services-title" className="display-title services-title" data-reveal>
-          <span className="line"><span>Produto próprio.</span></span>
-          <span className="line"><span><em>Execução à medida.</em></span></span>
-        </h2>
+        <div className="services-head">
+          <div>
+            <SectionLabel>O que fazemos</SectionLabel>
+            <h2 id="services-title" className="display-title" data-reveal>
+              <span className="line"><span>O que <em>fazemos.</em></span></span>
+            </h2>
+          </div>
+          <p>Temos um backoffice nosso. À volta dele construímos o que o teu negócio precisar: o site, os pagamentos, as automações.</p>
+        </div>
 
         <div className="service-list">
-          {services.map(({ id, tag, title, text, visual }) => (
-            <article key={id} className={`service service--${id}`} data-reveal>
+          {services.map(({ id, title, lead, label, text, visual }, i) => (
+            <article key={id} className={`service service--${id}`}>
               <div className="service-copy">
-                <span className="service-tag">{tag}</span>
+                <p className="mono-label">{label ? `0${i + 1} · ${label}` : `0${i + 1}`}</p>
                 <h3>{title}</h3>
+                <p className="service-lead">{lead}</p>
                 <p>{text}</p>
               </div>
               <div className="service-visual">{visual}</div>
@@ -169,7 +254,7 @@ function Services() {
 }
 
 /* ---------------------------------------------------------------------------
-   03 — Produto
+   Produto — capturas reais do backoffice
    ------------------------------------------------------------------------ */
 
 function Shot({ file, alt, width, height, index, caption, className }) {
@@ -187,15 +272,15 @@ function Work() {
   return (
     <section className="work" id="produto" aria-labelledby="work-title">
       <div className="wrap">
-        <SectionLabel index="03">Produto</SectionLabel>
-        <div className="work-head" data-reveal>
-          <h2 id="work-title" className="display-title work-title">
-            <span className="line"><span>Construído na Mavera<Dot className="dot--period" /></span></span>
+        <SectionLabel>Produto</SectionLabel>
+        <div className="work-head">
+          <h2 id="work-title" className="display-title work-title" data-reveal>
+            <span className="line"><span>Construído na <em>Mavera</em><span className="node" aria-hidden="true" /></span></span>
           </h2>
-          <p>Não é um mockup. É o nosso backoffice a funcionar — aqui com dados de demonstração.</p>
+          <p>Capturas do backoffice da Mavera, com dados de demonstração: a agenda da semana e uma sessão coletiva com os lugares ocupados.</p>
         </div>
 
-        <div className="work-stage" data-reveal>
+        <div className="work-stage">
           <Shot
             className="shot--agenda"
             file="agenda.png"
@@ -212,13 +297,85 @@ function Work() {
           />
         </div>
       </div>
-
     </section>
   );
 }
 
 /* ---------------------------------------------------------------------------
-   05 — A tua marca à frente. A Mavera por trás.
+   Método — um ponto percorre os cinco passos ao fazer scroll
+   ------------------------------------------------------------------------ */
+
+const steps = [
+  { name: 'Conversa', text: 'Percebemos o negócio e os objetivos.' },
+  { name: 'Diagnóstico', text: 'Erros, tarefas repetidas, tempo perdido.' },
+  { name: 'Proposta', text: 'Só o que o negócio precisa.' },
+  { name: 'Implementação', text: 'Ferramentas configuradas à medida.' },
+  { name: 'Acompanhamento', text: 'Continuamos ao lado.' },
+];
+
+function useScrollProgress(ref) {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    if (prefersReducedMotion()) { setProgress(1); return undefined; }
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const el = ref.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const p = Math.max(0, Math.min(1, (window.innerHeight * 0.7 - r.top) / Math.max(1, r.height * 0.75)));
+      setProgress((prev) => (Math.abs(prev - p) > 0.003 || p === 0 || p === 1 ? p : prev));
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [ref]);
+  return progress;
+}
+
+function Method() {
+  const ref = useRef(null);
+  const progress = useScrollProgress(ref);
+  return (
+    <section className="process" id="metodo" aria-labelledby="process-title" ref={ref}>
+      <div className="wrap">
+        <div className="process-head">
+          <div>
+            <SectionLabel>Método</SectionLabel>
+            <h2 id="process-title" className="display-title" data-reveal>
+              <span className="line"><span>Como <em>trabalhamos.</em></span></span>
+            </h2>
+          </div>
+          <p>Cinco passos, sempre pela mesma ordem. Nenhum começa antes de o anterior estar claro.</p>
+        </div>
+        <div className="timeline" style={{ '--p': progress.toFixed(3) }}>
+          <span className="tl-track" aria-hidden="true" />
+          <span className="tl-fill" aria-hidden="true" />
+          <span className="tl-dot" aria-hidden="true" />
+          <ol className="tl-list">
+            {steps.map(({ name, text }, i) => (
+              <li key={name} className={i === 0 || progress >= i / 4 - 0.02 ? 'is-on' : ''}>
+                <span className="tl-mark" aria-hidden="true" />
+                <span className="mono-label mono-label--teal">0{i + 1}</span>
+                <h3>{name}</h3>
+                <p>{text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   A tua marca à frente. A Mavera por trás.
    ------------------------------------------------------------------------ */
 
 // Exemplos neutros: três tipos de negócio, nenhuma marca.
@@ -359,11 +516,11 @@ function BrandBehind() {
   return (
     <section className="behind" id="marca" aria-labelledby="behind-title">
       <div className="wrap">
-        <SectionLabel index="05">A tua marca</SectionLabel>
+        <SectionLabel>A tua marca</SectionLabel>
         <BrandXray>
           <h2 id="behind-title" className="display-title behind-title" data-reveal>
-            <span className="line"><span>A tua marca à frente.</span></span>
-            <span className="line"><span><em>A Mavera por trás<Dot className="dot--period" /></em></span></span>
+            <span className="line"><span>A tua marca à frente. </span></span>
+            <span className="line it"><span><em>A Mavera por trás</em><span className="node" aria-hidden="true" /></span></span>
           </h2>
         </BrandXray>
       </div>
@@ -375,20 +532,18 @@ function BrandBehind() {
    Homepage
    ------------------------------------------------------------------------ */
 
-export function Landing({ contactEmail }) {
-  const talkHref = `mailto:${contactEmail}?subject=${encodeURIComponent('Vamos conversar')}`;
-
+export function Landing() {
   return (
     <>
-      <Hero talkHref={talkHref} />
+      <Hero />
+      <Problem />
+      <Mission />
+      <Approach />
       <Services />
       <Work />
-      <Projects index="04" />
       <BrandBehind />
-      <a className="solutions-link wrap" href="/solucoes">
-        <span>Tudo o que fazemos, em detalhe</span>
-        <span className="solutions-link-go">Ver soluções <ArrowIcon /></span>
-      </a>
+      <Method />
+      <Projects />
     </>
   );
 }

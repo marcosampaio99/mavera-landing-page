@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowIcon } from './ArrowIcon';
+import { FlowCanvas } from './Flow';
 
 export const backofficeUrl = 'https://app.mavera.pt/login';
+export const instagramUrl = 'https://www.instagram.com/mavera.pt/';
+export const slogan = 'A move into a new era.';
 
 export const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -20,12 +23,24 @@ export function SectionLabel({ index, children }) {
   );
 }
 
-export function Button({ href, children, variant = 'dark' }) {
+// Antes/depois da automação, como no Instagram: várias tarefas, um processo.
+const manualTasks = ['Copiar dados entre folhas', 'Enviar a mesma mensagem a cada cliente', 'Confirmar pedidos à mão', 'Atualizar registos'];
+
+export function BeforeAfter() {
   return (
-    <a className={`btn btn--${variant}`} href={href}>
-      <span className="btn-text">{children}</span>
-      <span className="btn-icon"><ArrowIcon /></span>
-    </a>
+    <div className="before-after">
+      <div className="ba-col">
+        <p className="mono-label">Antes</p>
+        <ul className="ba-before">
+          {manualTasks.map((task) => <li key={task}>{task}</li>)}
+        </ul>
+      </div>
+      <span className="ba-arrow" aria-hidden="true"><ArrowIcon direction="down" /></span>
+      <div className="ba-col">
+        <p className="mono-label">Depois</p>
+        <p className="ba-after">Um processo, feito automaticamente<Dot className="dot--period" /></p>
+      </div>
+    </div>
   );
 }
 
@@ -86,6 +101,7 @@ export function SiteHeader({ current, hasContact }) {
 
   const links = [
     { href: '/solucoes', label: 'Soluções', id: 'solucoes' },
+    { href: '/#metodo', label: 'Método', id: 'metodo' },
     { href: '/#projetos', label: 'Projetos', id: 'projetos' },
     { href: contactHref, label: 'Contacto', id: 'contacto' },
   ];
@@ -108,8 +124,11 @@ export function SiteHeader({ current, hasContact }) {
           {links.map(({ href, label, id }) => (
             <a key={id} className="nav-link" href={href} aria-current={current === id ? 'page' : undefined}><span>{label}</span></a>
           ))}
-          <a className="nav-backoffice" href={backofficeUrl}>Backoffice <ArrowIcon /></a>
         </nav>
+        <div className="header-actions">
+          <a className="nav-backoffice" href={backofficeUrl}>Backoffice <ArrowIcon /></a>
+          <a className="btn btn--line btn--sm" href={contactHref}>Falar connosco</a>
+        </div>
         <button
           ref={toggleRef}
           type="button"
@@ -136,42 +155,24 @@ export function SiteHeader({ current, hasContact }) {
   );
 }
 
-export function Closing({ contactEmail, index }) {
+// Contacto: o fluxo completo (turbulência, ponto mint, trilhos) sobre petróleo.
+export function Closing({ contactEmail }) {
   const talkHref = `mailto:${contactEmail}?subject=${encodeURIComponent('Falar com a Mavera')}`;
-  const ctaRef = useRef(null);
+  const dotRef = useRef(null);
 
-  // Atração magnética subtil do botão principal.
-  const onMove = (e) => {
-    if (prefersReducedMotion() || e.pointerType !== 'mouse') return;
-    const el = ctaRef.current;
-    const r = el.getBoundingClientRect();
-    const dx = e.clientX - (r.left + r.width / 2);
-    const dy = e.clientY - (r.top + r.height / 2);
-    el.style.setProperty('--mx', `${dx * 0.12}px`);
-    el.style.setProperty('--my', `${dy * 0.12}px`);
-  };
-  const onLeave = () => {
-    ctaRef.current?.style.setProperty('--mx', '0px');
-    ctaRef.current?.style.setProperty('--my', '0px');
-  };
-
+  // TODO(conteúdo): o slide 1/2 do Contacto no Instagram ainda está por completar.
   return (
     <section className="closing" id="contacto" aria-labelledby="closing-title">
+      <FlowCanvas preset="contact" dotRef={dotRef} />
       <div className="wrap">
-        <SectionLabel index={index}>Contacto</SectionLabel>
-        <div className="closing-grid" data-reveal>
-          <h2 id="closing-title" className="closing-title">
-            <span className="line"><span>Vamos construir</span></span>
-            <span className="line"><span>alguma coisa?</span></span>
-          </h2>
-          <div className="closing-side">
-            <p>Estúdio, salão ou empresa: conta-nos como trabalhas hoje. O resto desenhamos contigo.</p>
-            <a className="closing-mail" href={`mailto:${contactEmail}`}>{contactEmail}</a>
-          </div>
-          <a ref={ctaRef} className="closing-cta" href={talkHref} onPointerMove={onMove} onPointerLeave={onLeave}>
-            <span>Falar com a Mavera</span>
-            <span className="closing-cta-icon"><ArrowIcon /></span>
-          </a>
+        <SectionLabel>Contacto</SectionLabel>
+        <h2 id="closing-title" className="closing-title" data-reveal>
+          <span className="line"><span>Tudo começa com </span></span>
+          <span className="line it"><span>uma <em>conversa</em><span ref={dotRef} className="node" aria-hidden="true" /></span></span>
+        </h2>
+        <p className="closing-sub">Conta-nos o que gostarias de melhorar.</p>
+        <div className="closing-actions">
+          <a className="btn btn--ivory" href={talkHref}>Envia-nos uma mensagem</a>
         </div>
       </div>
     </section>
@@ -182,16 +183,34 @@ export function SiteFooter({ privacyUrl, termsUrl }) {
   return (
     <footer className="site-footer">
       <div className="wrap">
-        <div className="footer-row">
+        <div className="footer-top">
           <a className="footer-mark" href="/" aria-label="Mavera — página inicial">mavera<Dot /></a>
-          <nav aria-label="Ligações do rodapé">
-            <a href="/solucoes">Soluções</a>
-            <a href={backofficeUrl}>Backoffice</a>
+          <p className="footer-slogan" lang="en"><em>{slogan}</em></p>
+        </div>
+        {/* Três níveis: o site, os acessos externos e a parte legal. */}
+        <div className="footer-cols">
+          <nav className="footer-col footer-col--site" aria-labelledby="footer-site">
+            <p id="footer-site" className="mono-label">Mavera</p>
+            <a className="footer-ext" href="/solucoes">Soluções <ArrowIcon /></a>
+            <a className="footer-ext" href="/#metodo">Método <ArrowIcon /></a>
+            <a className="footer-ext" href="/#projetos">Projetos <ArrowIcon /></a>
+          </nav>
+          <div className="footer-col">
+            <p className="mono-label">Clientes</p>
+            <a className="footer-ext" href={backofficeUrl}>Backoffice <ArrowIcon /></a>
+          </div>
+          <div className="footer-col">
+            <p className="mono-label">Segue-nos</p>
+            <a className="footer-ext" href={instagramUrl} target="_blank" rel="noreferrer">Instagram <ArrowIcon /><span className="sr-only"> @mavera.pt (abre num novo separador)</span></a>
+          </div>
+        </div>
+        <div className="footer-base">
+          <nav className="footer-legal" aria-label="Informação legal">
             <a href={privacyUrl}>Privacidade</a>
             <a href={termsUrl}>Termos</a>
           </nav>
+          <p className="mono-label">Feito em Portugal · {new Date().getFullYear()}</p>
         </div>
-        <p className="footer-place"><Dot />Feito em Portugal · {new Date().getFullYear()}</p>
       </div>
     </footer>
   );
