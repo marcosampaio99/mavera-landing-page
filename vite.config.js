@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
@@ -32,8 +32,18 @@ function withRouteMeta(html, route, { title, description }) {
   return html;
 }
 
+// Frontends de clientes (tenants): entrada HTML própria em <tenant>/index.html,
+// isolada do site Mavera. As sub-rotas (src/tenants/<tenant>/tenant.js)
+// recebem uma cópia do index.html do tenant.
+const tenants = {
+  leandrofaria: ['entrar', 'conta'],
+};
+
 function staticRoutes() {
   let outDir;
+  const copies = [
+    ...Object.entries(tenants).flatMap(([tenant, subs]) => subs.map((sub) => [`${tenant}/index.html`, `${tenant}/${sub}`])),
+  ];
   return {
     name: 'mavera-static-routes',
     apply: 'build',
@@ -44,10 +54,39 @@ function staticRoutes() {
         mkdirSync(resolve(outDir, route), { recursive: true });
         writeFileSync(resolve(outDir, route, 'index.html'), withRouteMeta(html, route, meta));
       }
+      for (const [source, route] of copies) {
+        mkdirSync(resolve(outDir, route), { recursive: true });
+        copyFileSync(resolve(outDir, source), resolve(outDir, route, 'index.html'));
+      }
+    },
+  };
+}
+
+// Em desenvolvimento, serve o index.html do tenant em /<tenant> e em
+// qualquer sub-rota, em vez do fallback para o site Mavera.
+function tenantDevRoutes() {
+  const pattern = new RegExp(`^/(${Object.keys(tenants).join('|')})(/[^.]*)?(\\?.*)?$`);
+  return {
+    name: 'mavera-tenant-dev-routes',
+    apply: 'serve',
+    configureServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        const match = req.url && req.url.match(pattern);
+        if (match) req.url = `/${match[1]}/index.html${match[3] || ''}`;
+        next();
+      });
     },
   };
 }
 
 export default defineConfig({
-  plugins: [staticRoutes()],
+  plugins: [staticRoutes(), tenantDevRoutes()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(import.meta.dirname, 'index.html'),
+        ...Object.fromEntries(Object.keys(tenants).map((t) => [t, resolve(import.meta.dirname, `${t}/index.html`)])),
+      },
+    },
+  },
 });

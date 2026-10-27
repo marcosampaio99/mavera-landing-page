@@ -1,0 +1,2 @@
+minimumReleaseAgeExclude:
+  - '@marcosampaio99/mavera-client@0.8.1'
